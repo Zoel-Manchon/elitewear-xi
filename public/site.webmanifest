@@ -1,0 +1,11 @@
+{
+    "name": "Elitewear XI",
+    "short_name": "Elitewear",
+    "icons": [
+        { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+    ],
+    "theme_color": "#0f172a",
+    "background_color": "#f6f8fc",
+    "display": "standalone",
+    "start_url": "/"
+}

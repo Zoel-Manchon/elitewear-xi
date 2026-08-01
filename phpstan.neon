@@ -1,0 +1,29 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    # Deuda estática preexistente. Los errores NUEVOS que no estén aquí hacen
+    # fallar el CI; los ya registrados no.
+    - phpstan-baseline.neon
+
+parameters:
+    paths:
+        - app
+
+    level: 5
+
+    # Las propiedades de Eloquent salen de las columnas de la base de datos.
+    # Larastan las deduce leyendo las migraciones, pero necesita que el modelo
+    # documente lo que no puede inferir. Mientras no estén anotadas, estos dos
+    # avisos generan cientos de falsos positivos que ocultan los errores reales.
+    #
+    # No es lo ideal: lo correcto es anotar los modelos con @property y volver
+    # a activarlos. Está en la lista de próximos pasos del README.
+    ignoreErrors:
+        -
+            identifier: property.notFound
+            path: app/*
+        -
+            identifier: method.notFound
+            path: app/*
+
+    checkModelProperties: false
+    reportUnmatchedIgnoredErrors: false

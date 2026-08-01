@@ -1,0 +1,21 @@
+.git
+.github
+node_modules
+vendor
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+bootstrap/cache/*
+public/build
+public/storage
+# Marca del servidor de desarrollo de Vite: si entra en la imagen,
+# @vite genera URLs a 127.0.0.1:5173 y la web se queda sin estilos.
+public/hot
+.env
+.env.*
+!.env.example
+tests
+*.md
+phpstan-errors*.txt
+composer.phar

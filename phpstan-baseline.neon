@@ -1,0 +1,28 @@
+# Deuda estática registrada de forma granular.
+#
+# Los errores NUEVOS que no estén aquí hacen fallar el CI; los registrados no.
+#
+# Regenerar cuando aparezca deuda nueva que no se pueda arreglar de inmediato:
+#   vendor/bin/phpstan analyse --generate-baseline
+parameters:
+    ignoreErrors:
+        # ── argument.unresolvableType en map() ────────────────────────────
+        #
+        # Larastan no infiere el tipo de retorno del callback de map() en
+        # estos dos puntos, ni con el genérico de la colección anotado ni con
+        # `: array` explícito en el closure.
+        #
+        # NO es un fallo del código: el callback recibe un Product y devuelve
+        # un array, y eso está declarado. Es una limitación del analizador
+        # resolviendo genéricos anidados.
+        #
+        # Registrado en lugar de silenciado globalmente: si el mismo error
+        # aparece en otro fichero, el CI lo señalará.
+        -
+            identifier: argument.unresolvableType
+            path: app/Http/Controllers/SearchController.php
+            count: 1
+        -
+            identifier: argument.unresolvableType
+            path: app/Http/Controllers/WishlistController.php
+            count: 1

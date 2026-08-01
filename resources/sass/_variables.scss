@@ -1,0 +1,116 @@
+// ============================================================================
+//  Sobrescritura de Bootstrap — paleta ecommerce clara.
+// ============================================================================
+
+// --- Paleta ---------------------------------------------------------------
+$navy-950: #0b1220;
+$navy-900: #0f172a;
+$navy-850: #172033;
+$navy-800: #1e293b;
+$paper: #ffffff;
+$paper-soft: #f6f8fc;
+$paper-muted: #edf1f7;
+$ink: #111827;
+$primary-blue: #2563eb;
+$gold: #b48624;
+$grass: #15803d;
+
+$primary: $primary-blue;
+$secondary: #64748b;
+$success: $grass;
+$warning: $gold;
+$danger: #be123c;
+$light: $paper;
+$dark: $navy-900;
+
+$body-bg: $paper-soft;
+$body-color: $ink;
+$body-secondary-color: rgba($ink, 0.68);
+$body-tertiary-bg: $paper-muted;
+
+$border-color: rgba($navy-900, 0.13);
+$border-radius: 4px;
+$border-radius-sm: 4px;
+$border-radius-lg: 8px;
+$border-radius-xl: 10px;
+
+// --- Tipografía -----------------------------------------------------------
+$font-family-sans-serif: 'Barlow', system-ui, -apple-system, sans-serif;
+$headings-font-family: 'Archivo', system-ui, sans-serif;
+$headings-font-weight: 800;
+$headings-line-height: 1.05;
+$font-size-base: 1rem;
+$line-height-base: 1.55;
+
+$display-font-family: 'Archivo', system-ui, sans-serif;
+$display-font-weight: 900;
+
+// --- Componentes ----------------------------------------------------------
+$card-bg: $paper;
+$card-border-color: rgba($navy-900, 0.11);
+$card-cap-bg: $paper-muted;
+
+$dropdown-bg: $paper;
+$dropdown-border-color: rgba($navy-900, 0.13);
+$dropdown-link-color: $ink;
+$dropdown-link-hover-bg: $paper-muted;
+$dropdown-link-hover-color: $navy-900;
+
+// El carrito mantiene una superficie oscura diferenciada.
+$offcanvas-bg-color: $navy-900;
+$offcanvas-color: $paper;
+$offcanvas-border-color: rgba($paper, 0.12);
+$offcanvas-horizontal-width: 420px;
+
+$input-bg: $paper;
+$input-disabled-bg: $paper-muted;
+$input-color: $ink;
+$input-border-color: rgba($navy-900, 0.18);
+$input-focus-bg: $paper;
+$input-focus-color: $ink;
+$input-focus-border-color: rgba($primary-blue, 0.8);
+$input-focus-box-shadow: 0 0 0 0.2rem rgba($primary-blue, 0.14);
+$input-placeholder-color: rgba($ink, 0.42);
+
+$form-select-bg: $paper;
+$form-select-color: $ink;
+$form-select-border-color: rgba($navy-900, 0.18);
+$form-select-indicator-color: $ink;
+
+$form-check-input-bg: $paper;
+$form-check-input-border: 1px solid rgba($navy-900, 0.3);
+
+$btn-font-family: 'Barlow', sans-serif;
+$btn-font-weight: 600;
+$btn-focus-width: 0.2rem;
+
+$table-color: $ink;
+$table-bg: transparent;
+$table-border-color: rgba($navy-900, 0.1);
+$table-striped-bg: rgba($navy-900, 0.025);
+$table-hover-bg: rgba($primary-blue, 0.045);
+
+$pagination-bg: $paper;
+$pagination-color: $ink;
+$pagination-border-color: rgba($navy-900, 0.13);
+$pagination-hover-bg: $paper-muted;
+$pagination-hover-color: $navy-900;
+$pagination-active-bg: $primary-blue;
+$pagination-active-border-color: $primary-blue;
+$pagination-disabled-bg: $paper-muted;
+$pagination-disabled-color: rgba($ink, 0.35);
+
+$alert-border-radius: 6px;
+$badge-font-weight: 600;
+$badge-border-radius: 4px;
+
+$modal-content-bg: $paper;
+$modal-content-border-color: rgba($navy-900, 0.13);
+
+$breadcrumb-divider-color: rgba($ink, 0.4);
+$breadcrumb-active-color: rgba($ink, 0.64);
+
+$link-color: $primary-blue;
+$link-hover-color: #1d4ed8;
+$link-decoration: none;
+$link-hover-decoration: underline;

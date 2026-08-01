@@ -1,0 +1,12 @@
+* text=auto eol=lf
+
+# Excluye de las estadísticas de lenguaje de GitHub lo que no has escrito tú
+public/build/**    linguist-generated
+docs/openapi.yaml  linguist-documentation
+*.blade.php        linguist-language=PHP
+
+# No incluir en `git archive`
+/.github           export-ignore
+/tests             export-ignore
+/docker            export-ignore
+/.dockerignore     export-ignore

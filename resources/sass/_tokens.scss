@@ -1,0 +1,59 @@
+// ============================================================================
+//  Sistema de diseño — "Matchday Commerce"
+//  Una base clara, limpia y centrada en producto, con azul deportivo como
+//  acción principal y superficies oscuras reservadas para navegación y pie.
+// ============================================================================
+
+:root {
+    // --- Superficies claras -------------------------------------------------
+    --paper: #ffffff;
+    --paper-soft: #f6f8fc;
+    --paper-muted: #edf1f7;
+    --paper-strong: #e2e8f0;
+
+    // Alias heredados. Se mantienen para no duplicar estilos antiguos, pero
+    // ahora representan una interfaz light-first.
+    --pitch-950: var(--paper-soft);
+    --pitch-900: var(--paper);
+    --pitch-850: var(--paper-muted);
+    --pitch-800: var(--paper-strong);
+    --pitch-750: #d5deea;
+    --pitch-700: #c4cfdd;
+    --line: rgba(15, 23, 42, 0.13);
+
+    // --- Texto --------------------------------------------------------------
+    --ink: #111827;
+    --ink-dim: rgba(17, 24, 39, 0.72);
+    --ink-faint: rgba(17, 24, 39, 0.52);
+
+    // Alias heredados de texto.
+    --chalk: var(--ink);
+    --chalk-dim: var(--ink-dim);
+    --chalk-faint: var(--ink-faint);
+
+    // Compatibilidad con la capa de tarjetas claras.
+    --bone: var(--paper);
+    --bone-dim: var(--paper-muted);
+
+    // --- Acentos ------------------------------------------------------------
+    --flock: #2563eb;      // azul ecommerce: CTA y estados activos
+    --flock-dark: #1d4ed8;
+    --flock-soft: rgba(37, 99, 235, 0.12);
+    --gold: #b48624;       // detalle premium, sin competir con el CTA
+    --grass: #15803d;
+
+    // --- Superficies oscuras contextuales ----------------------------------
+    --navy-950: #0b1220;
+    --navy-900: #0f172a;
+    --navy-850: #172033;
+    --navy-800: #1e293b;
+
+    // --- Tipografía ---------------------------------------------------------
+    --font-display: 'Archivo', system-ui, sans-serif;
+    --font-body: 'Barlow', system-ui, sans-serif;
+    --font-data: 'Barlow Condensed', system-ui, sans-serif;
+
+    // --- Ritmo --------------------------------------------------------------
+    --radius: 4px;
+    --radius-lg: 8px;
+}
