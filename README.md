@@ -5,6 +5,14 @@
   Laravel 13 · MySQL · Bootstrap 5 sobre Sass · PayPal sandbox · API REST versionada
 </p>
 
+[![CI](https://github.com/Zoel-Manchon/elitewear-xi/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Zoel-Manchon/elitewear-xi/actions/workflows/ci.yml)
+![Laravel 13](https://img.shields.io/badge/Laravel-13-FF2D20?style=flat-square&logo=laravel&logoColor=white)
+![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777BB4?style=flat-square&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
+![Bootstrap 5](https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat-square&logo=bootstrap&logoColor=white)
+![PayPal sandbox](https://img.shields.io/badge/PayPal-sandbox-00457C?style=flat-square&logo=paypal&logoColor=white)
+![license MIT](https://img.shields.io/badge/license-MIT-2A3340?style=flat-square)
+
 <p align="center">
   <a href="https://github.com/Zoel-Manchon/elitewear-xi/actions/workflows/ci.yml">
     <img src="https://github.com/Zoel-Manchon/elitewear-xi/actions/workflows/ci.yml/badge.svg" alt="CI">
