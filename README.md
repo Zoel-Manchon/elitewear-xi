@@ -1,72 +1,81 @@
 <h1 align="center">Elitewear XI</h1>
 
 <p align="center">
-  Ecommerce de camisetas retro de fútbol.<br>
-  Laravel 13 · MySQL · Bootstrap 5 sobre Sass · PayPal sandbox · API REST versionada
+  Retro football shirt ecommerce.<br>
+  Laravel 13 · MySQL · Bootstrap 5 over Sass · PayPal sandbox · versioned REST API
 </p>
-
-[![CI](https://github.com/Zoel-Manchon/elitewear-xi/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Zoel-Manchon/elitewear-xi/actions/workflows/ci.yml)
-![Laravel 13](https://img.shields.io/badge/Laravel-13-FF2D20?style=flat-square&logo=laravel&logoColor=white)
-![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777BB4?style=flat-square&logo=php&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
-![Bootstrap 5](https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat-square&logo=bootstrap&logoColor=white)
-![PayPal sandbox](https://img.shields.io/badge/PayPal-sandbox-00457C?style=flat-square&logo=paypal&logoColor=white)
-![license MIT](https://img.shields.io/badge/license-MIT-2A3340?style=flat-square)
 
 <p align="center">
-  <a href="https://github.com/Zoel-Manchon/elitewear-xi/actions/workflows/ci.yml">
-    <img src="https://github.com/Zoel-Manchon/elitewear-xi/actions/workflows/ci.yml/badge.svg" alt="CI">
-  </a>
+  <a href="https://github.com/Zoel-Manchon/elitewear-xi/actions/workflows/ci.yml"><img src="https://github.com/Zoel-Manchon/elitewear-xi/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
+  <img src="https://img.shields.io/badge/Laravel-13-FF2D20?style=flat-square&logo=laravel&logoColor=white" alt="Laravel 13">
+  <img src="https://img.shields.io/badge/PHP-8.3-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP 8.3">
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white" alt="MySQL">
+  <img src="https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat-square&logo=bootstrap&logoColor=white" alt="Bootstrap 5">
+  <img src="https://img.shields.io/badge/PayPal-sandbox-00457C?style=flat-square&logo=paypal&logoColor=white" alt="PayPal sandbox">
+  <img src="https://img.shields.io/badge/license-MIT-2A3340?style=flat-square" alt="MIT licence">
 </p>
 
-![Portada](docs/screenshots/01-home.png)
+![Home](docs/screenshots/01-home.png)
 
 ---
 
-## Qué es
+## At a glance
 
-Una tienda completa de camisetas de época: catálogo importado desde APIs
-públicas, carrito persistente, checkout con pasarela de pago, panel de
-administración y API REST documentada.
+|  |  |
+| --- | --- |
+| **What it is** | A complete period-shirt shop: catalogue imported from public APIs, persistent cart, checkout with a payment gateway, admin panel and a documented REST API. |
+| **The one idea** | The test suite does not check that the buttons work. **It checks that the attacks fail.** An IDOR against someone else's cart line, a sort with injected SQL, a registration carrying `is_admin=1`, an order for more units than exist, a single-use coupon redeemed twice, a polyglot with a valid PNG header followed by PHP. |
+| **Built with** | Laravel 13 · PHP 8.3 · MySQL · Bootstrap 5 over Sass · Vite · PayPal Orders v2 |
+| **Money** | Integer cents, never `float`. Orders snapshot their own prices, so history cannot be rewritten by editing the catalogue. |
+| **Concurrency** | `lockForUpdate()` on variants and coupons: two buyers going for the last size M are serialised, not both sold. |
+| **The browser** | Never sees or sends an amount. It can only manipulate a PayPal order id, and the server checks that against the order before treating anything as paid. |
+| **Run it** | `docker compose up -d` → `http://localhost:8000` · `admin@retroshop.test` / `password` |
 
-Es un proyecto de portfolio con un sesgo deliberado hacia la **seguridad de
-aplicación**. Cada decisión que cierra un vector de ataque está comentada en el
-código y justificada aquí, y la suite de tests no comprueba que los botones
-funcionen: comprueba que los ataques fallan.
-
-**Credenciales de prueba:** `admin@retroshop.test` / `password`
+**Contents** — [Getting started](#getting-started) · [Architecture](#architecture) ·
+[Data model](#data-model) · [Order lifecycle](#order-lifecycle) ·
+[Checkout and payment](#checkout-and-payment) · [Cart](#cart) ·
+[Importing from external APIs](#importing-from-external-apis) ·
+[Security](#security) · [Bugs found and closed](#bugs-found-and-closed) ·
+[API](#api) · [Quality](#quality) · [What is next](#what-is-next)
 
 ---
 
-## Capturas
+## What it is
 
-### Tienda
+A portfolio project with a deliberate bias towards **application security**. Every
+decision that closes an attack vector is commented in the code and justified here.
+
+---
+
+## Screenshots
+
+### Shop
 
 | | |
 |---|---|
-| ![Catálogo](docs/screenshots/02-catalogo.png)<br>**Catálogo** — filtros combinables con recuento por faceta | ![Producto](docs/screenshots/03-producto.png)<br>**Ficha** — galería, tallas y stock real |
-| ![Galería](docs/screenshots/04-galeria.png)<br>**Galería** — zoom a pantalla completa con PhotoSwipe | ![Carrito](docs/screenshots/05-carrito.png)<br>**Carrito** — cajón lateral con progreso al envío gratis |
-| ![Checkout](docs/screenshots/06-checkout.png)<br>**Checkout** — cupón aplicado sobre el resumen | 
+| ![Catalogue](docs/screenshots/02-catalogo.png)<br>**Catalogue** — combinable filters with a count per facet | ![Product](docs/screenshots/03-producto.png)<br>**Product** — gallery, sizes and real stock |
+| ![Gallery](docs/screenshots/04-galeria.png)<br>**Gallery** — full-screen zoom with PhotoSwipe | ![Cart](docs/screenshots/05-carrito.png)<br>**Cart** — side drawer with free-shipping progress |
+| ![Checkout](docs/screenshots/06-checkout.png)<br>**Checkout** — coupon applied to the summary | |
 
-### Administración
+### Admin
 
 | | |
 |---|---|
-| ![Panel](docs/screenshots/08-admin-dashboard.png)<br>**Panel** — ingresos, pedidos y stock bajo | ![Producto](docs/screenshots/09-admin-producto.png)<br>**Catálogo** — tallas, stock e imágenes |
-| ![Auditoría](docs/screenshots/10-admin-auditoria.png)<br>**Auditoría** — quién cambió qué, cuándo y desde qué IP | ![API](docs/screenshots/11-api.png)<br>**API v1** — catálogo público en JSON |
+| ![Dashboard](docs/screenshots/08-admin-dashboard.png)<br>**Dashboard** — revenue, orders and low stock | ![Product admin](docs/screenshots/09-admin-producto.png)<br>**Catalogue** — sizes, stock and images |
+| ![Audit](docs/screenshots/10-admin-auditoria.png)<br>**Audit** — who changed what, when and from which IP | ![API](docs/screenshots/11-api.png)<br>**API v1** — public catalogue as JSON |
 
 ---
 
-## Arranque
+## Getting started
 
-### Con Docker
+### With Docker
 
 ```bash
 cp .env.example .env
 npm ci
 npm run build
 
-docker compose down -v --remove-orphans   # primera instalación o reinicio total
+docker compose down -v --remove-orphans   # first install, or a full reset
 docker compose build --no-cache app queue
 docker compose up -d mysql redis app web
 docker compose exec app php artisan key:generate --force
@@ -76,10 +85,10 @@ docker compose up -d queue
 docker compose exec app php artisan catalog:doctor
 ```
 
-La configuración de desarrollo de Compose usa una cuenta MySQL interna y
-reproducible (`elitewear` / `secret`). No depende del usuario o contraseña que
-tengas configurados para el MySQL de Windows. La imagen `app` incluye Composer,
-por lo que pueden ejecutarse dentro del contenedor los mismos controles que CI:
+The Compose development configuration uses an internal, reproducible MySQL account
+(`elitewear` / `secret`). It does not depend on whatever user or password your host
+MySQL is set up with. The `app` image ships Composer, so the same checks CI runs can be
+run inside the container:
 
 ```bash
 docker compose exec app composer validate --strict --no-check-publish
@@ -88,43 +97,28 @@ docker compose exec app vendor/bin/pint --test
 docker compose exec app php artisan test
 ```
 
-Para reconstruirlo entero desde cero, incluida la base de datos:
+To rebuild everything from scratch, database included: `sh docker/reset.sh`, or
+`.\docker\reset.ps1` in PowerShell. To run the CI-equivalent checks before pushing:
+`.\docker\verify.ps1`.
 
-```bash
-sh docker/reset.sh
-```
+Then `http://localhost:8000`.
 
-En PowerShell:
-
-```powershell
-.\docker\reset.ps1
-```
-
-Para ejecutar antes del push los controles equivalentes a CI:
-
-```powershell
-.\docker\verify.ps1
-```
-
-En `http://localhost:8000`.
-
-> **Si la página sale sin estilos**, borra `public/hot` y recompila. Ese fichero
-> lo crea `npm run dev` para redirigir los assets al servidor de Vite; si queda
-> ahí después de pararlo, `@vite` sigue apuntando a `127.0.0.1:5173` y todo
-> falla por CORS.
+> **If the page comes up unstyled**, delete `public/hot` and rebuild. That file is
+> created by `npm run dev` to redirect assets to the Vite server; if it is left behind
+> after stopping it, `@vite` keeps pointing at `127.0.0.1:5173` and everything fails on
+> CORS.
 >
 > ```bash
 > rm -f public/hot && npm run build && docker compose restart app
 > ```
 
-La imagen trae **GD compilado**, que es lo que necesita Intervention Image para
-reencodear las imágenes descargadas de terceros. Es el motivo principal de que
-haya Docker aquí: el entorno deja de depender de cómo tenga cada uno
-configurado su PHP.
+The image carries **GD compiled in**, which is what Intervention Image needs to
+re-encode images downloaded from third parties. That is the main reason Docker is here
+at all: the environment stops depending on how each machine happens to have PHP set up.
 
-### Sin Docker
+### Without Docker
 
-Requiere PHP 8.3+ con `gd`, `pdo_mysql`, `mbstring`, `intl`, `zip` y `exif`.
+Needs PHP 8.3+ with `gd`, `pdo_mysql`, `mbstring`, `intl`, `zip` and `exif`.
 
 ```bash
 composer install
@@ -138,54 +132,54 @@ php artisan storage:link
 php artisan serve
 ```
 
-### Poblar el catálogo desde las APIs
+### Filling the catalogue from the APIs
 
 ```bash
 php artisan catalog:sportsdb-full --all-countries --max-countries=15
-php artisan kits:gallery --max=2      # segunda equipación por producto
-php artisan teams:media --limit=40    # banner y fanart de cada club
-php artisan players:import --max=6    # retratos de jugadores
+php artisan kits:gallery --max=2      # second kit per product
+php artisan teams:media --limit=40    # banner and fanart per club
+php artisan players:import --max=6    # player portraits
 ```
 
-### Si algo no arranca
+### If something will not start
 
-| Síntoma | Causa | Arreglo |
+| Symptom | Cause | Fix |
 |---|---|---|
-| Página sin estilos | `public/hot` quedó de un `npm run dev` anterior | `rm -f public/hot && npm run build` |
-| Catálogo vacío | La siembra no llegó a terminar, o los productos están sin publicar | `php artisan catalog:doctor` lo distingue y `--publish` lo corrige |
-| Imágenes en 0 al importar | Falta `gd`, o la versión de Intervention Image no coincide | La imagen de Docker trae `gd`; el error aparece ahora en la columna de omitidas |
-| Un cambio en el código no surte efecto | El Dockerfile copia el código en la imagen | Las carpetas de código van montadas en `docker-compose.yml`; si tocas `composer.json` sí hace falta `docker compose build` |
-| `Connection refused` a MySQL | El `.env` apunta al MySQL del host | `docker-compose.yml` sobrescribe `DB_HOST` y `DB_PORT`; comprueba usuario y contraseña |
+| Unstyled page | `public/hot` left over from an earlier `npm run dev` | `rm -f public/hot && npm run build` |
+| Empty catalogue | The seed never finished, or the products are unpublished | `php artisan catalog:doctor` tells the two apart, `--publish` fixes it |
+| Zero images on import | `gd` missing, or the Intervention Image version does not match | The Docker image ships `gd`; the error now shows in the skipped column |
+| A code change has no effect | The Dockerfile copies the code into the image | The code directories are mounted in `docker-compose.yml`; touching `composer.json` does need `docker compose build` |
+| `Connection refused` to MySQL | The `.env` points at the host's MySQL | `docker-compose.yml` overrides `DB_HOST` and `DB_PORT`; check the user and password |
 
 ---
 
-## Arquitectura
+## Architecture
 
 ```mermaid
 graph TD
-    subgraph Entrada
-        WEB[Rutas web · Blade]
+    subgraph Inbound
+        WEB[Web routes · Blade]
         API[API v1 · Sanctum]
-        HOOK[Webhook de PayPal]
-        CLI[Comandos de importación]
+        HOOK[PayPal webhook]
+        CLI[Import commands]
     end
 
-    subgraph Aplicación
-        CTRL[Controladores<br/>finos]
-        REQ[Form Requests<br/>validación]
-        ACT[Actions<br/>casos de uso]
-        RES[Resources<br/>serialización]
+    subgraph Application
+        CTRL[Controllers<br/>thin]
+        REQ[Form Requests<br/>validation]
+        ACT[Actions<br/>use cases]
+        RES[Resources<br/>serialisation]
     end
 
-    subgraph Dominio
-        MOD[Modelos Eloquent]
+    subgraph Domain
+        MOD[Eloquent models]
         ENUM[Enums<br/>OrderStatus · ShirtSize · KitType]
         MONEY[Money<br/>value object]
     end
 
-    subgraph Externo
+    subgraph External
         DB[(MySQL)]
-        DISK[Disco público]
+        DISK[Public disk]
         PP[PayPal Orders v2]
         SDB[TheSportsDB]
         WM[Wikimedia Commons]
@@ -211,82 +205,81 @@ graph TD
     style PP fill:#1a2f27,color:#f4f1e8
 ```
 
-Los controladores no contienen lógica de negocio: validan con un Form Request,
-delegan en una Action y serializan con un Resource. La única interfaz del
-proyecto es `PaymentGateway`, y existe para poder sustituir PayPal por un doble
-en los tests.
+Controllers hold no business logic: they validate with a Form Request, delegate to an
+Action and serialise with a Resource. The only interface in the project is
+`PaymentGateway`, and it exists so PayPal can be swapped for a double in the tests.
 
-**No hay repositorios sobre Eloquent.** Eloquent ya es el repositorio; envolverlo
-añade una capa que no desacopla nada real.
+**There are no repositories over Eloquent.** Eloquent *is* the repository; wrapping it
+adds a layer that decouples nothing real.
 
 ---
 
-## Modelo de datos
+## Data model
 
 ```mermaid
 erDiagram
-    TEAMS ||--o{ PRODUCTS : "fabrica"
-    TEAMS ||--o{ TEAM_EQUIPMENTS : "equipaciones"
-    TEAMS ||--o{ PLAYERS : "plantilla"
-    PRODUCTS ||--o{ PRODUCT_VARIANTS : "tallas"
-    PRODUCTS ||--o{ PRODUCT_IMAGES : "galería"
-    CATEGORIES }o--o{ PRODUCTS : "clasifica"
+    TEAMS ||--o{ PRODUCTS : "makes"
+    TEAMS ||--o{ TEAM_EQUIPMENTS : "kits"
+    TEAMS ||--o{ PLAYERS : "squad"
+    PRODUCTS ||--o{ PRODUCT_VARIANTS : "sizes"
+    PRODUCTS ||--o{ PRODUCT_IMAGES : "gallery"
+    CATEGORIES }o--o{ PRODUCTS : "classifies"
 
-    USERS ||--o{ ADDRESSES : "tiene"
-    USERS ||--o| CARTS : "posee"
-    CARTS ||--o{ CART_ITEMS : "contiene"
-    PRODUCT_VARIANTS ||--o{ CART_ITEMS : "referencia"
+    USERS ||--o{ ADDRESSES : "has"
+    USERS ||--o| CARTS : "owns"
+    CARTS ||--o{ CART_ITEMS : "contains"
+    PRODUCT_VARIANTS ||--o{ CART_ITEMS : "references"
 
-    USERS ||--o{ ORDERS : "hace"
-    ORDERS ||--o{ ORDER_ITEMS : "congela"
-    ORDERS ||--o{ PAYMENTS : "registra"
-    COUPONS ||--o{ ORDERS : "descuenta"
-    PRODUCT_VARIANTS |o--o{ ORDER_ITEMS : "referencia débil"
+    USERS ||--o{ ORDERS : "places"
+    ORDERS ||--o{ ORDER_ITEMS : "freezes"
+    ORDERS ||--o{ PAYMENTS : "records"
+    COUPONS ||--o{ ORDERS : "discounts"
+    PRODUCT_VARIANTS |o--o{ ORDER_ITEMS : "weak reference"
 
-    USERS ||--o{ REVIEWS : "escribe"
-    USERS ||--o{ WISHLIST_ITEMS : "guarda"
-    PRODUCT_VARIANTS ||--o{ STOCK_ALERTS : "avisa"
+    USERS ||--o{ REVIEWS : "writes"
+    USERS ||--o{ WISHLIST_ITEMS : "saves"
+    PRODUCT_VARIANTS ||--o{ STOCK_ALERTS : "notifies"
 
     PRODUCTS {
-        bigint base_price_cents "entero, nunca float"
+        bigint base_price_cents "integer, never float"
         string season "1994-95"
-        timestamp published_at "null = borrador"
+        timestamp published_at "null = draft"
     }
     PRODUCT_VARIANTS {
-        string size "unidad de inventario"
+        string size "the inventory unit"
         int stock
         int price_delta_cents
     }
     CART_ITEMS {
-        int quantity "sin precio: se recalcula"
+        int quantity "no price: recalculated"
     }
     ORDER_ITEMS {
         string product_name "snapshot"
         bigint unit_price_cents "snapshot"
     }
     PAYMENTS {
-        string provider_order_id "unique = idempotencia"
+        string provider_order_id "unique = idempotency"
     }
 ```
 
-Cuatro reglas sostienen todo lo demás:
+Four rules hold up everything else:
 
-| Regla | Por qué |
+| Rule | Why |
 |---|---|
-| Dinero en enteros de céntimos | Los `float` pierden precisión al sumar |
-| `order_items` guarda snapshot | Un pedido histórico no puede cambiar si cambia el catálogo |
-| `cart_items` **no** guarda precio | El carrito es intención; el pedido es contrato |
-| El carrito referencia la *variante* | La talla es la unidad de inventario, no un atributo |
+| Money as integer cents | `float` loses precision as soon as you add |
+| `order_items` stores a snapshot | A past order cannot change because the catalogue did |
+| `cart_items` stores **no** price | A cart is an intention; an order is a contract |
+| The cart references the *variant* | Size is the inventory unit, not an attribute |
 
 ---
 
-## Ciclo de vida de un pedido
+## Order lifecycle
 
 ```mermaid
 stateDiagram-v2
-    [*] --> pending: PlaceOrder<br/>(stock bloqueado y descontado)
-    pending --> paid: captura de PayPal<br/>o webhook
-    pending --> cancelled: el cliente abandona
+    [*] --> pending: PlaceOrder<br/>(stock locked and decremented)
+    pending --> paid: PayPal capture<br/>or webhook
+    pending --> cancelled: customer walks away
     paid --> shipped
     paid --> refunded
     paid --> cancelled
@@ -298,97 +291,96 @@ stateDiagram-v2
     delivered --> [*]
 ```
 
-La máquina de estados vive en `OrderStatus::canTransitionTo()`, no en el
-controlador ni en el formulario. Un `POST` a mano con un estado arbitrario se
-rechaza igual que un clic en la interfaz.
+The state machine lives in `OrderStatus::canTransitionTo()`, not in the controller and
+not in the form. A hand-rolled `POST` with an arbitrary status is rejected exactly like
+a click in the interface.
 
 ---
 
-## Checkout y pago
+## Checkout and payment
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor C as Cliente
+    actor C as Customer
     participant L as Laravel
     participant DB as MySQL
     participant PP as PayPal
 
-    C->>L: POST /checkout (dirección)
+    C->>L: POST /checkout (address)
     L->>DB: BEGIN
-    L->>DB: SELECT ... FOR UPDATE (variantes y cupón)
-    Note over L,DB: El bloqueo serializa a dos compradores<br/>que van a por la última talla M
-    alt Stock insuficiente
+    L->>DB: SELECT ... FOR UPDATE (variants and coupon)
+    Note over L,DB: The lock serialises two buyers<br/>going for the last size M
+    alt Not enough stock
         L->>DB: ROLLBACK
-        L-->>C: "Solo quedan N unidades"
-    else Hay stock
-        L->>DB: descuenta stock, canjea cupón, crea pedido y snapshot
+        L-->>C: "Only N left"
+    else Stock available
+        L->>DB: decrement stock, redeem coupon, create order and snapshot
         L->>DB: COMMIT
-        L-->>C: página de pago
+        L-->>C: payment page
     end
 
-    C->>L: POST /pagos/{pedido}/paypal
-    L->>PP: crear orden (importe tomado del PEDIDO)
-    PP-->>L: id de orden
-    C->>PP: aprueba en la ventana de PayPal
-    C->>L: POST .../capturar
-    L->>PP: capturar
-    PP-->>L: id de captura + importe
-    Note over L: Contrasta el importe capturado<br/>contra el total del pedido
-    L->>DB: pedido = paid
-    L-->>C: confirmación
+    C->>L: POST /payments/{order}/paypal
+    L->>PP: create order (amount taken from the ORDER)
+    PP-->>L: order id
+    C->>PP: approves in the PayPal window
+    C->>L: POST .../capture
+    L->>PP: capture
+    PP-->>L: capture id + amount
+    Note over L: Checks the captured amount<br/>against the order total
+    L->>DB: order = paid
+    L-->>C: confirmation
 
     PP->>L: webhook PAYMENT.CAPTURE.COMPLETED
-    Note over L: Verifica la firma.<br/>Si ya está pagado, no hace nada:<br/>idempotente por diseño
+    Note over L: Verifies the signature.<br/>If already paid, does nothing:<br/>idempotent by design
 ```
 
-El navegador nunca ve ni envía un importe. Lo único que puede manipular es el
-identificador de la orden de PayPal, y el servidor lo contrasta contra el pedido
-antes de dar nada por cobrado.
+The browser never sees or sends an amount. The only thing it can manipulate is the
+PayPal order id, and the server checks that against the order before treating anything
+as paid.
 
 ---
 
-## Carrito
+## Cart
 
 ```mermaid
 flowchart LR
-    A[Visitante] -->|añade| B{¿Sesión iniciada?}
-    B -->|No| C[Carrito de invitado<br/>token en la SESIÓN]
-    B -->|Sí| D[Carrito del usuario]
-    C -->|inicia sesión| E[MergeGuestCart]
+    A[Visitor] -->|adds| B{Signed in?}
+    B -->|No| C[Guest cart<br/>token in the SESSION]
+    B -->|Yes| D[User cart]
+    C -->|signs in| E[MergeGuestCart]
     E --> D
-    D --> F[Cajón lateral<br/>fetch sin recargar]
+    D --> F[Side drawer<br/>fetch, no reload]
     F --> G[Checkout]
 
     style C fill:#1a2f27,color:#f4f1e8
     style E fill:#d6b36a,color:#12201a
 ```
 
-El token del carrito de invitado vive en la sesión, **nunca** en la URL ni en una
-cookie propia. Si el cliente pudiera elegirlo, cambiar ese valor sería leer y
-vaciar el carrito de otra persona: un IDOR de manual, y el fallo más común en
-carritos hechos a mano.
+The guest cart token lives in the session, **never** in the URL and never in a cookie of
+its own. If the client could choose it, changing that value would mean reading and
+emptying somebody else's cart: a textbook IDOR, and the most common flaw in hand-rolled
+carts.
 
 ---
 
-## Importación desde APIs externas
+## Importing from external APIs
 
-El catálogo se nutre de **TheSportsDB** (equipaciones, escudos, plantillas) y
-**Wikimedia Commons** (archivo retro). Es la parte del sistema por donde entra
-contenido que no controlamos.
+The catalogue is fed by **TheSportsDB** (kits, crests, squads) and **Wikimedia Commons**
+(retro archive). This is the part of the system where content we do not control gets in.
 
 ```mermaid
 flowchart TD
-    A[URL de la API externa] --> B{¿Dominio permitido?}
-    B -->|No| X1[Rechazada]
-    B -->|Sí| C[Descarga con límite de tamaño]
-    C --> D{¿getimagesizefromstring<br/>reconoce los bytes?}
-    D -->|No| X2[Rechazada]
-    D -->|Sí| E{¿PNG, JPEG o WEBP?<br/>¿Dimensiones razonables?}
-    E -->|No| X3[Rechazada]
-    E -->|Sí| F[Nombre generado por nosotros<br/>id externo saneado]
-    F --> G[Reencodeado a WEBP]
-    G --> H[(Disco público)]
+    A[External API URL] --> B{Allowed domain?}
+    B -->|No| X1[Rejected]
+    B -->|Yes| C[Download with a size cap]
+    C --> D{Does getimagesizefromstring<br/>recognise the bytes?}
+    D -->|No| X2[Rejected]
+    D -->|Yes| E{PNG, JPEG or WEBP?<br/>Sane dimensions?}
+    E -->|No| X3[Rejected]
+    E -->|Yes| F[Filename we generate<br/>external id sanitised]
+    F --> G[Re-encoded to WEBP]
+    G --> H[(Public disk)]
 
     style X1 fill:#c4331f,color:#fff
     style X2 fill:#c4331f,color:#fff
@@ -396,160 +388,156 @@ flowchart TD
     style G fill:#d6b36a,color:#12201a
 ```
 
-Todo pasa por `RemoteImageStore`, y el principio es explícito: **una imagen que
-llega por HTTP no merece más confianza que una que sube un usuario**.
+Everything goes through `RemoteImageStore`, and the principle is explicit: **an image
+arriving over HTTP deserves no more trust than one a user uploads.**
 
-Hay un límite de píxeles además del de bytes: un PNG de 30 KB puede
-descomprimirse a 40.000 × 40.000 y agotar la memoria al reencodearlo.
+There is a pixel cap as well as a byte cap: a 30 KB PNG can decompress to 40,000 ×
+40,000 and exhaust memory during re-encoding.
 
 ---
 
-## Avisos de reposición
+## Back-in-stock alerts
 
 ```mermaid
 sequenceDiagram
-    actor V as Visitante
+    actor V as Visitor
     participant L as Laravel
     participant DB as MySQL
     actor A as Admin
-    participant Q as Cola
+    participant Q as Queue
 
-    V->>L: POST /avisos (talla + correo)
-    L->>DB: firstOrCreate(variante, correo)
-    L-->>V: "Te escribiremos cuando vuelva"
-    Note over L,V: Respuesta idéntica siempre.<br/>Un mensaje distinto convertiría<br/>esto en un comprobador de cuentas.
+    V->>L: POST /alerts (size + email)
+    L->>DB: firstOrCreate(variant, email)
+    L-->>V: "We will write when it is back"
+    Note over L,V: Always the identical response.<br/>A different message would turn this<br/>into an account checker.
 
-    A->>L: repone stock desde el panel
+    A->>L: restocks from the panel
     L->>DB: UPDATE stock 0 -> N
-    Note over L: El observador comprueba el valor<br/>ANTERIOR: solo dispara en la<br/>transición 0 -> positivo
-    L->>Q: encola BackInStock
-    Q-->>V: correo con enlace firmado de baja
+    Note over L: The observer checks the PREVIOUS<br/>value: it fires only on the<br/>0 -> positive transition
+    L->>Q: queues BackInStock
+    Q-->>V: email with a signed unsubscribe link
 ```
 
 ---
 
-## Seguridad
+## Security
 
-| Control | Dónde | Qué cierra |
+| Control | Where | What it closes |
 |---|---|---|
-| Comprobación de propiedad del carrito | `CartController::authorizeItem()` | IDOR sobre líneas de carrito |
-| Token de invitado en sesión | `CartResolver` | Robo de carrito por manipulación de parámetro |
-| Whitelist de ordenación | `CatalogController::SORTS` | Inyección SQL vía `orderBy()` |
-| Escape de `%` y `_` | Catálogo y buscador | Volcado del catálogo con `?q=%` |
-| `abort_unless` sobre `published_at` | `CatalogController::show()` | Borradores visibles adivinando la URL |
-| `is_admin` fuera de `#[Fillable]` | `User` | Escalada de privilegios desde `POST /register` |
-| 404 en vez de 403 en `/admin` | `EnsureUserIsAdmin` | Enumeración del panel |
-| Máquina de estados en el enum | `OrderStatus` | Saltarse el flujo con un POST manual |
-| `lockForUpdate()` en el pedido | `PlaceOrder` | Sobreventa por concurrencia |
-| `lockForUpdate()` sobre el cupón | `PlaceOrder` | Canje múltiple de un código de un solo uso |
-| Descuento acotado al subtotal | `Coupon::discountFor()` | Totales negativos |
-| Mensaje único de código inválido | `CouponController` | Búsqueda de cupones por fuerza bruta |
-| Importe tomado del pedido | `PayPalGateway` | Manipulación del precio en el cliente |
-| Contraste del importe capturado | `PaymentController` | Captura por debajo del total |
-| `unique` en `provider_order_id` | Tabla `payments` | Webhooks duplicados |
-| Verificación de firma del webhook | `PaymentController` | Webhooks falsificados |
-| Nombre de fichero saneado | `RemoteImageStore` | Path traversal desde la respuesta de una API |
-| Verificación real de los bytes | `RemoteImageStore` | `Content-Type` falsificado por el servidor remoto |
-| Reencodeado a WEBP | `RemoteImageStore` | Cargas útiles tras cabecera de imagen válida |
-| Límite de píxeles | `RemoteImageStore` | Agotamiento de memoria al descomprimir |
-| Rechazo de SVG en subidas | `ProductRequest` | XSS por vector servido desde el propio origen |
-| CSP con nonce y sin `unsafe-inline` | `SecurityHeaders` | XSS almacenado |
-| `report-uri` en la CSP | `SecurityHeaders` | Política sin telemetría |
-| `escapeHtml()` antes de `innerHTML` | `http.js` | XSS desde el catálogo |
-| Escapado de etiquetas en JSON-LD | `shop/show.blade.php` | XSS con origen en TheSportsDB |
-| Id de YouTube validado | `Team::youtubeId()` | Inyección desde una URL de tercero |
-| `Password::uncompromised()` | `RegisterController` | Credenciales ya filtradas |
-| Rate limiting por email + IP | `TokenController` | Fuerza bruta sobre la API |
-| Mensaje único de error de login | `TokenController` | Enumeración de usuarios |
-| Disponibilidad en vez de stock | `ProductVariantResource` | Fuga de información de negocio |
-| Respuesta idéntica en avisos | `StockAlertController` | Comprobación de cuentas por correo |
-| URL firmada para la baja | `BackInStock` | Bajas fabricadas por terceros |
-| Registro de auditoría | `Auditable` | Cambios sin autor identificable |
-| Secretos excluidos del registro | `Auditable::$auditExclude` | Filtración por el propio registro |
+| Cart ownership check | `CartController::authorizeItem()` | IDOR on cart lines |
+| Guest token in the session | `CartResolver` | Cart theft by parameter tampering |
+| Sort whitelist | `CatalogController::SORTS` | SQL injection via `orderBy()` |
+| Escaping `%` and `_` | Catalogue and search | Dumping the catalogue with `?q=%` |
+| `abort_unless` on `published_at` | `CatalogController::show()` | Drafts visible by guessing a URL |
+| `is_admin` outside `#[Fillable]` | `User` | Privilege escalation from `POST /register` |
+| 404 rather than 403 on `/admin` | `EnsureUserIsAdmin` | Panel enumeration |
+| State machine in the enum | `OrderStatus` | Skipping the flow with a hand-made POST |
+| `lockForUpdate()` on the order | `PlaceOrder` | Overselling under concurrency |
+| `lockForUpdate()` on the coupon | `PlaceOrder` | Multiple redemption of a single-use code |
+| Discount capped at the subtotal | `Coupon::discountFor()` | Negative totals |
+| One message for any invalid code | `CouponController` | Brute-forcing coupons |
+| Amount taken from the order | `PayPalGateway` | Client-side price tampering |
+| Captured amount checked | `PaymentController` | Capturing below the total |
+| `unique` on `provider_order_id` | `payments` table | Duplicate webhooks |
+| Webhook signature verification | `PaymentController` | Forged webhooks |
+| Sanitised filename | `RemoteImageStore` | Path traversal from an API response |
+| Real byte verification | `RemoteImageStore` | `Content-Type` forged by the remote server |
+| Re-encoding to WEBP | `RemoteImageStore` | Payloads behind a valid image header |
+| Pixel cap | `RemoteImageStore` | Memory exhaustion on decompression |
+| SVG rejected on upload | `ProductRequest` | XSS via a vector served from our own origin |
+| CSP with nonce, no `unsafe-inline` | `SecurityHeaders` | Stored XSS |
+| `report-uri` in the CSP | `SecurityHeaders` | A policy with no telemetry |
+| `escapeHtml()` before `innerHTML` | `http.js` | XSS from the catalogue |
+| Tags escaped in JSON-LD | `shop/show.blade.php` | XSS originating at TheSportsDB |
+| YouTube id validated | `Team::youtubeId()` | Injection from a third-party URL |
+| `Password::uncompromised()` | `RegisterController` | Already-breached credentials |
+| Rate limiting per email + IP | `TokenController` | API brute force |
+| One login error message | `TokenController` | User enumeration |
+| Availability instead of stock | `ProductVariantResource` | Leaking business information |
+| Identical response on alerts | `StockAlertController` | Account checking by email |
+| Signed unsubscribe URL | `BackInStock` | Third-party forged unsubscribes |
+| Audit log | `Auditable` | Changes with no identifiable author |
+| Secrets excluded from the log | `Auditable::$auditExclude` | Leaking through the log itself |
 
-La CSP solo funciona porque **no hay JavaScript inline en ninguna vista**.
-Galería, carrito, buscador y filtros viven en módulos importados por Vite.
-Retrofitear eso más tarde es caro; hacerlo desde el principio es gratis.
+The CSP only works because **there is no inline JavaScript in any view**. Gallery, cart,
+search and filters all live in modules imported by Vite. Retrofitting that later is
+expensive; doing it from the start is free.
 
 ---
 
-## Bugs encontrados y cerrados
+## Bugs found and closed
 
-Los que enseñan algo, con la causa real y no el síntoma.
+The ones that teach something, with the real cause rather than the symptom.
 
-**Los filtros no devolvían nada al combinar dos.**
-La condición era `$except !== 'tipo' && ($filters['tipo'] ?? null)`. En PHP, `&&`
-devuelve **siempre un booleano**, así que el closure de `when()` recibía `true` en
-lugar del slug y la consulta comparaba `slug = 1`. Con `decada`,
-`substr(true, 0, 3)` daba `'1'` y `season LIKE '1%'` casaba con todo 1970-1999,
-que es por lo que parecía funcionar a medias. Sobrevivió a tres revisiones porque
-ningún test comprobaba que un filtro *devolviera* lo correcto, solo que la página
-cargara. Hoy lo cubre `CatalogFilterTest` con ocho casos.
+**Filters returned nothing when combined.**
+The condition was `$except !== 'tipo' && ($filters['tipo'] ?? null)`. In PHP, `&&`
+**always** returns a boolean, so the `when()` closure received `true` instead of the
+slug and the query compared `slug = 1`. With `decada`, `substr(true, 0, 3)` gave `'1'`
+and `season LIKE '1%'` matched everything from 1970 to 1999, which is why it looked
+half-working. It survived three reviews because no test checked that a filter *returned*
+the right thing, only that the page loaded. `CatalogFilterTest` now covers it with eight
+cases.
 
-**Path traversal desde la respuesta de una API.**
-El identificador externo de la equipación se concatenaba tal cual en la ruta del
-fichero. Un id con `../` en la respuesta escribía fuera del directorio previsto.
-Lo controla un tercero, no un usuario: es el tipo de entrada que se olvida
-validar.
+**Path traversal from an API response.**
+The kit's external identifier was concatenated straight into the file path. An id
+containing `../` in the response wrote outside the intended directory. A third party
+controls it, not a user: exactly the kind of input people forget to validate.
 
-**XSS almacenado por JSON-LD.**
-Los datos estructurados se serializaban con `JSON_UNESCAPED_SLASHES` dentro de un
-`<script>`. Un `</script>` en el nombre de un producto —y los nombres vienen de
-TheSportsDB— cerraba el bloque y ejecutaba lo que viniera detrás.
+**Stored XSS through JSON-LD.**
+The structured data was serialised with `JSON_UNESCAPED_SLASHES` inside a `<script>`. A
+`</script>` in a product name — and the names come from TheSportsDB — closed the block
+and executed whatever followed.
 
-**Asignación masiva silenciosa, tres veces.**
-`notified_at`, `is_approved` y `redemptions_count` fuera de `$fillable` hacían que
-`update()` los descartara sin error. El síntoma siempre era el mismo: "esto no
-guarda y no da ningún fallo". Cuando un `update()` no hace nada, `$fillable` es lo
-primero que hay que mirar.
+**Silent mass assignment, three times.**
+`notified_at`, `is_approved` and `redemptions_count` outside `$fillable` made `update()`
+discard them without an error. The symptom was always the same: "this does not save and
+gives no error". When an `update()` does nothing, `$fillable` is the first place to look.
 
-**Un directorio donde debía haber un fichero.**
-`phpstan.neon` incluye `phpstan-baseline.neon`, pero ese nombre existía en el
-repositorio como directorio vacío. PHPStan aborta al no poder leer un fichero
-de `includes:`, así que el job de análisis estático fallaba sin producir un
-solo error de análisis — el mensaje no decía nada del código. Los zips y Git no
-conservan ficheros vacíos, y un `mkdir` accidental lo convierte en carpeta.
+**A directory where a file should have been.**
+`phpstan.neon` includes `phpstan-baseline.neon`, but that name existed in the repository
+as an empty directory. PHPStan aborts when it cannot read a file from `includes:`, so
+the static-analysis job failed without producing a single analysis error — the message
+said nothing about the code. Zips and Git do not preserve empty files, and an accidental
+`mkdir` turns it into a folder.
 
-**Los tests contra la base de datos real.**
-`phpunit.xml` declaraba `DB_CONNECTION=sqlite`, pero en Docker `env_file`
-inyecta el `.env` como variables del proceso y PHPUnit no las sobrescribe. La
-suite ejecutó `migrate:fresh` sobre MySQL y **borró el catálogo de desarrollo**.
-Es la misma causa que tenía el CSRF activo en los tests y la validación DNS
-haciendo consultas reales: tres síntomas sin relación aparente, una sola causa
-de configuración. `TestCase::refreshApplication()` fuerza ahora SQLite en
-memoria antes de que `RefreshDatabase` actúe.
+**Tests running against the real database.**
+`phpunit.xml` declared `DB_CONNECTION=sqlite`, but under Docker `env_file` injects the
+`.env` as process variables and PHPUnit does not override them. The suite ran
+`migrate:fresh` against MySQL and **wiped the development catalogue**. It is the same
+cause that had CSRF active during tests and DNS validation making real queries: three
+unrelated-looking symptoms, one configuration cause. `TestCase::refreshApplication()`
+now forces in-memory SQLite before `RefreshDatabase` acts.
 
-**Desactivación en cascada del catálogo.**
-Si la API no devolvía equipaciones, la lista de ids activos quedaba vacía, el
-filtro no se aplicaba y el `update` alcanzaba a *todos* los productos del equipo.
-Un fallo temporal de un tercero despublicaba el catálogo entero sin que nada lo
-señalara.
+**Cascading catalogue deactivation.**
+If the API returned no kits, the list of active ids came back empty, the filter was not
+applied, and the `update` reached *every* product of the team. A temporary third-party
+failure unpublished the whole catalogue with nothing flagging it.
 
 ---
 
 ## API
 
-Documentación completa en [`docs/openapi.yaml`](docs/openapi.yaml).
+Full documentation in [`docs/openapi.yaml`](docs/openapi.yaml).
 
 ```bash
-# Catálogo público
+# Public catalogue
 curl http://localhost:8000/api/v1/products?team=afc-ajax
 
 # Token
 curl -X POST http://localhost:8000/api/v1/tokens \
   -H 'Content-Type: application/json' \
-  -d '{"email":"tu@correo.com","password":"...","device_name":"cli"}'
+  -d '{"email":"you@example.com","password":"...","device_name":"cli"}'
 
-# Pedidos
+# Orders
 curl http://localhost:8000/api/v1/orders -H 'Authorization: Bearer <token>'
 ```
 
-Versionada desde el primer día: `/api/v1` permite publicar una v2 sin romper a
-quien ya consume la actual. Añadir la versión después es mucho más caro.
+Versioned from day one: `/api/v1` means a v2 can ship without breaking whoever already
+consumes the current one. Adding the version afterwards costs far more.
 
 ---
 
-## Calidad
+## Quality
 
 ```bash
 docker compose exec app php artisan test
@@ -562,36 +550,30 @@ npm ci && npm run build && npm audit --audit-level=high
 
 ![Tests](docs/screenshots/12-tests.png)
 
-La suite no comprueba que los botones funcionen: comprueba que los ataques
-fallan. Un IDOR contra una línea de carrito ajena, una ordenación con SQL
-inyectado, un registro con `is_admin=1`, un pedido con más unidades de las que
-hay en stock, un cupón de un solo uso canjeado dos veces, un polyglot con
-cabecera PNG válida seguida de PHP.
-
-CI en GitHub Actions: suite sobre SQLite en memoria, validación de migraciones
-contra MySQL 8.4, Larastan nivel 5 con baseline incremental, Pint y auditoría de
-dependencias PHP/npm. Los errores nuevos no incluidos en el baseline bloquean el push.
+CI on GitHub Actions: the suite over in-memory SQLite, migration validation against
+MySQL 8.4, Larastan level 5 with an incremental baseline, Pint, and a PHP/npm dependency
+audit. New errors not in the baseline block the push.
 
 ---
 
-## Estructura
+## Structure
 
 ```
 app/
-├── Actions/          casos de uso (PlaceOrder, AddItemToCart, MergeGuestCart)
-├── Console/Commands/ importadores del catálogo
+├── Actions/          use cases (PlaceOrder, AddItemToCart, MergeGuestCart)
+├── Console/Commands/ catalogue importers
 ├── Contracts/        PaymentGateway
 ├── Enums/            OrderStatus, ShirtSize, KitType, CouponType
 ├── Http/
 │   ├── Controllers/  web, Admin/, Api/V1/
 │   ├── Middleware/   EnsureUserIsAdmin, SecurityHeaders
-│   ├── Requests/     validación
-│   └── Resources/    serialización JSON
+│   ├── Requests/     validation
+│   └── Resources/    JSON serialisation
 ├── Models/           Eloquent
 ├── Notifications/    BackInStock
 ├── Observers/        ProductVariantObserver
 ├── Services/
-│   ├── PayPal/       cliente de la pasarela
+│   ├── PayPal/       gateway client
 │   └── SportsData/   TheSportsDB, Commons, RemoteImageStore
 ├── Support/          Money, CartResolver, CouponSession, ShirtRenderer
 └── Traits/           Auditable
@@ -601,23 +583,23 @@ resources/
 ├── sass/             _tokens, _variables, _components, app
 └── views/            shop/, account/, admin/, partials/
 
-docker/               nginx y php.ini
-docs/                 openapi.yaml y capturas
+docker/               nginx and php.ini
+docs/                 openapi.yaml and screenshots
 ```
 
 ---
 
-## Próximos pasos
+## What is next
 
-1. **2FA (TOTP) en el panel de admin**, con códigos de recuperación.
-2. **Reseñas con moderación previa** en lugar de aprobación automática.
-3. **Facturas en PDF** con numeración correlativa.
-4. **Meilisearch** para el buscador: `LIKE` con comodín por delante no usa
-   índices y no escala.
+1. **TOTP 2FA on the admin panel**, with recovery codes.
+2. **Reviews with prior moderation** rather than automatic approval.
+3. **PDF invoices** with sequential numbering.
+4. **Meilisearch** for the search box: `LIKE` with a leading wildcard cannot use an index
+   and does not scale.
 
 ---
 
-## Licencia
+## License
 
-MIT. Las camisetas, escudos y nombres de club pertenecen a sus titulares; este
-proyecto es una demostración técnica sin ánimo comercial.
+MIT. The shirts, crests and club names belong to their owners; this project is a
+technical demonstration with no commercial purpose.
